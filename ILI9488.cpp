@@ -420,7 +420,7 @@ void ILI9488::windowData(color_t c) {
 }
 
 void ILI9488::windowData(color_t *c, int len) {
-    for (uint32_t i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         data16(c[i]);
     }
 }
@@ -495,7 +495,7 @@ uint16_t ILI9488_PMP::read(boolean cont) {
 #endif
 
 
-uint16_t ILI9488::read(boolean cont) {
+uint16_t ILI9488::read(boolean __attribute__((unused)) cont) {
     return 0;
 }
 
@@ -515,8 +515,7 @@ void ILI9488::getRectangle(int x, int y, int w, int h, color_t *buf) {
     command(0x002E);
     (void)read();
     (void)read(true);
-    for (uint32_t i = 0; i < w * h; i++) {
-        color_t color1 = 0;
+    for (int i = 0; i < w * h; i++) {
         color_t color = read(true);
         buf[i] = 0;
         buf[i] |= ((color & 0xF800) >> 11);
