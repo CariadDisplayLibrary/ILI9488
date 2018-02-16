@@ -399,7 +399,7 @@ void ILI9488::setRotation(int m) {
 	}
 }
 
-void ILI9488::invertDisplay(boolean i) {
+void ILI9488::invertDisplay(bool i) {
 	command(i ? 0x21 : 0x20);
 }
 
@@ -480,7 +480,7 @@ void ILI9488_PMP::data16(uint16_t cmd) {
     PMDIN = cmd;
 }
 
-uint16_t ILI9488_PMP::read(boolean cont) {
+uint16_t ILI9488_PMP::read(bool cont) {
     uint16_t din;
     PMADDR = 0x8001;
     if (!cont) {
@@ -495,7 +495,7 @@ uint16_t ILI9488_PMP::read(boolean cont) {
 #endif
 
 
-uint16_t ILI9488::read(boolean __attribute__((unused)) cont) {
+uint16_t ILI9488::read(bool __attribute__((unused)) cont) {
     return 0;
 }
 

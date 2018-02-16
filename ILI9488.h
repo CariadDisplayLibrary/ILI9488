@@ -96,7 +96,7 @@ class ILI9488 : public DisplayCore {
         void drawHorizontalLine(int x, int y, int w, color_t color);
         void fillRectangle(int x, int y, int w, int h, color_t color);
         void setRotation(int r);
-        void invertDisplay(boolean i);
+        void invertDisplay(bool i);
         void displayOn();
         void displayOff();
         void openWindow(int, int, int, int);
@@ -112,7 +112,7 @@ class ILI9488 : public DisplayCore {
         virtual void data8(uint8_t);
         virtual void data16(uint16_t);
         virtual void command(uint16_t);
-        virtual uint16_t read(boolean cont = false);
+        virtual uint16_t read(bool cont = false);
         virtual void getRectangle(int x, int y, int w, int h, color_t *buf);
 };
 
@@ -129,7 +129,7 @@ class ILI9488_PMP : public ILI9488 {
         void data8(uint8_t);
         void data16(uint16_t);
         void command(uint16_t);
-        uint16_t read(boolean cont = false);
+        uint16_t read(bool cont = false);
 };
 #endif
 
