@@ -12,7 +12,7 @@ XBSC-Group: DisplayCore
 XBSC-Subgroup: Drivers
 Depends: libdisplaycore-core
 Provides: ILI9488.h
-Description: ILI9488 driver for DisplayCore
+Description: ILI9488
  The ILI9488 is used by a number of generic 3.5"
  320x480 TFT screens.  It's an 8-bit parallel interface normally.
 
