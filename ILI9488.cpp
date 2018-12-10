@@ -439,7 +439,7 @@ void ILI9488_PMP::initializeDevice() {
     PMCONbits.PTRDEN = 1;
     PMCONbits.CSF = 0b01; // Enable CS2
 
-    PMAEN = 0x8001; // Enable PMA0 pin for DC pin and CS2 as CS
+    PMAEN = 0x0001; // Enable PMA0 pin for DC pin and CS2 as CS
 
     PMMODEbits.MODE16 = 1;
     PMMODEbits.MODE = 0b10;
@@ -447,11 +447,13 @@ void ILI9488_PMP::initializeDevice() {
     PMMODEbits.WAITM = 1;
     PMMODEbits.WAITE = 0;
 
-    PMADDR = 0x8000; // Set current address to 0, CS2 Active
+    PMADDR = 0x0000; // Set current address to 0, CS2 Active
 
     PMCONbits.ON = 1;
 
     pinMode(pin_reset, OUTPUT);
+    pinMode(pin_cs, OUTPUT);
+    digitalWrite(pin_cs, HIGH);
     digitalWrite(pin_reset, HIGH);
     delay(100);
     digitalWrite(pin_reset, LOW);
@@ -459,6 +461,7 @@ void ILI9488_PMP::initializeDevice() {
     digitalWrite(pin_reset, HIGH);
     delay(100);
 
+    digitalWrite(pin_cs, LOW);
     startDisplay();
 }
 
@@ -510,6 +513,7 @@ color_t ILI9488::colorAt(int x, int y) {
     color1 |= ((color & 0x001F) << 11);
     return color1;
 }
+
 void ILI9488::getRectangle(int x, int y, int w, int h, color_t *buf) {
     setAddrWindow(x, y, x+w-1, y+h-1);
     command(0x002E);
@@ -523,4 +527,47 @@ void ILI9488::getRectangle(int x, int y, int w, int h, color_t *buf) {
         buf[i] |= ((color & 0x001F) << 11);
     }
 }
+
+
+#if defined(__PIC32MZ__)
+
+void ILI9488_EBI::initializeDevice() {
+    CFGEBIA = 0x80000001;
+    CFGEBIC = 0x00003013;
+    EBICS0 = 0x20000000; 
+    EBIMSK0 = 0x00000021;
+    EBISMT0 = 0x00000000;
+    EBISMCON = 0x00000000;
+
+    _command = (uint16_t *)0xE0000000;
+    _data = (uint16_t *)0xE0000002;
+
+    pinMode(pin_reset, OUTPUT);
+    digitalWrite(pin_reset, HIGH);
+    delay(100);
+    digitalWrite(pin_reset, LOW);
+    delay(100);
+    digitalWrite(pin_reset, HIGH);
+    delay(100);
+
+    startDisplay();
+}
+
+void ILI9488_EBI::command(uint16_t cmd) {
+    *_command = cmd;
+}
+
+void ILI9488_EBI::data8(uint8_t cmd) {
+    *_data = cmd;
+}
+
+void ILI9488_EBI::data16(uint16_t cmd) {
+    *_data = cmd;
+}
+
+uint16_t ILI9488_EBI::read(bool cont) {
+    return 0; //*_data;
+}
+
+#endif
 

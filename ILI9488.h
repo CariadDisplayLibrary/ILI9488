@@ -115,15 +115,35 @@ class ILI9488 : public DisplayCore {
         virtual uint16_t read(bool cont = false);
         virtual void getRectangle(int x, int y, int w, int h, color_t *buf);
 };
-
 #ifdef _PMMODE_MODE16_POSITION
 class ILI9488_PMP : public ILI9488 {
     private:
 
         uint8_t pin_reset;
+        uint8_t pin_cs;
 
     public:
-        ILI9488_PMP(uint8_t res) : pin_reset(res) {}
+        ILI9488_PMP(uint8_t cs, uint8_t res) : pin_cs(cs), pin_reset(res) {}
+
+        void initializeDevice();
+        void data8(uint8_t);
+        void data16(uint16_t);
+        void command(uint16_t);
+        uint16_t read(bool cont = false);
+};
+#endif
+
+#if defined(__PIC32MZ__)
+class ILI9488_EBI : public ILI9488 {
+    private:
+
+        uint8_t pin_reset;
+
+        volatile uint16_t *_data;
+        volatile uint16_t *_command;
+
+    public:
+        ILI9488_EBI(uint8_t res) : pin_reset(res) {}
 
         void initializeDevice();
         void data8(uint8_t);
@@ -134,3 +154,4 @@ class ILI9488_PMP : public ILI9488 {
 #endif
 
 #endif
+
