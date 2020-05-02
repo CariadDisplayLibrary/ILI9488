@@ -1,9 +1,9 @@
 #ifndef _ILI9488_H
 #define _ILI9488_H
 
-#include <DisplayCore.h>
+#include <Cariad.h>
 
-class ILI9488 : public DisplayCore {
+class ILI9488 : public Cariad {
     private:
         uint8_t pin_rs;
         uint8_t pin_rd;
